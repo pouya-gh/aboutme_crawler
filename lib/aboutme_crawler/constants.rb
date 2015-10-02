@@ -44,4 +44,8 @@ module AboutmeCrawler
   //          "my.proxy.com:8080"
   "ssl_proxy": ""
 }}
+  PROJECT_STRUCTURE = {
+    dirs: ['output'],
+    files: ['settings.json']
+  }
 end
