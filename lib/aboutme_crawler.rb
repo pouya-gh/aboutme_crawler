@@ -49,7 +49,7 @@ module AboutmeCrawler
 
       @browser.goto "about.me/search"
       sleep(@step_delay)
-      @browser.text_field(id: 'terms').set(q)
+      @browser.text_field(id: 'terms').set(@search_query)
       sleep(@step_delay)
       @browser.button(class: 'submitbutton').click
       sleep(@step_delay)
