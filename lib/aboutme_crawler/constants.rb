@@ -1,8 +1,13 @@
 module AboutmeCrawler
+  # Default timeout time.
   DEFAULT_TIMEOUT = 180
+  # Default delay between requests.
   DEFAULT_STEP_DELAY = 3
+  # This is the default search query.
   DEFAULT_SEARCH_QUERY = "john smith"
+  # This is the default desired maximum results.
   DEFAULT_MAX_RESULTS = 3
+  # Default settings of a new session.
   DEFAULT_SETTINGS = %q{{
   // Here you set the timeout (in seconds).
   // Only positive integers are valid, other values mean that
@@ -44,6 +49,7 @@ module AboutmeCrawler
   //          "my.proxy.com:8080"
   "ssl_proxy": ""
 }}
+  # Directories and files needed for a session.
   PROJECT_STRUCTURE = {
     dirs: ['output'],
     files: ['settings.json']

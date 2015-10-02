@@ -8,7 +8,14 @@ require 'json'
 require 'set'
 
 module AboutmeCrawler
+  ##
+  # Every thing is done with this class.
+  # Check README and find_aboutme for an example.
   class Crawler
+    ##
+    # This is the constructor of this class.
+    # It reads the settings from settings.json file and
+    # defines all variables.
     def initialize
       settings_hash = read_settings_from_file
       client = Selenium::WebDriver::Remote::Http::Default.new
@@ -30,6 +37,11 @@ module AboutmeCrawler
       @browser = Watir::Browser.new :firefox, profile: profile, http_client: client
     end
 
+    ##
+    # This method goes to the login page of about.me and
+    # using the provided username and password, signs in.
+    # Example:
+    #   >> Crawler.new().sign_in
     def sign_in
       # @browser.goto "about.me"
       # sleep(@step_delay)
@@ -42,6 +54,14 @@ module AboutmeCrawler
       sleep(@step_delay)
     end
 
+    ##
+    # This method searches for the provided query and saves
+    # the profile links in output/profiles.json file.
+    # It has to called after sign_in method.
+    # Example:
+    #   >> crawler = Crawler.new
+    #   >> crawler.sign_in
+    #   >> crawler.search_for
     def search_for
       output_file = File.open("./output/profiles.json", 'w')
       links_set = Set.new
@@ -79,6 +99,18 @@ module AboutmeCrawler
       output_file.close
     end
 
+    ##
+    # This method goes to links found by search_for method
+    # and extracts the users' contacts. It recieves the links
+    # from output/profiles.json file and saves the results
+    # in output/contacts.json.
+    # It has to called after search_for method, or just after
+    # sign_in method if there already is a profiles.json file.
+    # Example:
+    #   >> crawler = Crawler.new
+    #   >> crawler.sign_in
+    #   >> crawler.search_for
+    #   >> crawler.crawl_profiles
     def crawl_profiles
       list_of_links = JSON.parse(File.open('./output/profiles.json').read)
       user_contacts = []
@@ -102,12 +134,23 @@ module AboutmeCrawler
       output_file.close
     end
 
+    ##
+    # This method just closes the browser.
     def terminate
       @browser.close
     end
 
     private
 
+    ##
+    # This method extracts the profile links from a
+    # provided HTML string and add the result to
+    # profile_links_set. Desired maximum number of
+    # results is determined by @max_results.
+    # Arguments:
+    #     html_doc: (String)
+    #     profile_links_set: (Set)
+    #     number_of_results: (Integer)
     def extract_profile_links(html_doc, profile_links_set, number_of_results)
       if profile_links_set.size >= @max_results || profile_links_set.size == number_of_results
         return
@@ -123,6 +166,11 @@ module AboutmeCrawler
       end
     end
 
+    ##
+    # This method extracts the contacts from
+    # an HTML string. It returns an array.
+    # Arguments:
+    #     html_doc: (String)
     def extract_contacts(html_doc)
       doc = Nokogiri::HTML(html_doc)
       contacts = []
@@ -132,6 +180,10 @@ module AboutmeCrawler
       contacts
     end
 
+    ##
+    # This method reads settings from settings.json
+    # and parses them to a ruby object.
+    # It return a hash table.
     def read_settings_from_file
       JSON.parse(File.open('./settings.json').read)
     end
