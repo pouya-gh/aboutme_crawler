@@ -53,6 +53,11 @@ module AboutmeCrawler
       @browser.button(class: 'submitbutton').click
       sleep(@step_delay)
 
+      if @browser.div(class: 'search-suggestions-container').text.downcase == "no results found."
+        puts "Nothing was found!"
+        return
+      end
+
       if @browser.p(class: 'search-number').present?
         number_of_results = @browser.p(class: 'search-number').text.gsub(/[^\d]/i, '').to_i
       end
@@ -64,8 +69,8 @@ module AboutmeCrawler
       while links_set.size < @max_results && links_set.size < number_of_results
         @browser.scroll.to :bottom
         sleep(@step_delay)
-
-        html_doc = "<html><head></head><body>" + browser.div(class: 'search-results-container').when_present(100).html + "</body></html>"
+        browser.div(class: 'pagethumbs-responsive').when_present(100)
+        html_doc = "<html><head></head><body>" + browser.div(class: 'search-results-container').html + "</body></html>"
         extract_profile_links(html_doc, links_set, number_of_results)
       end
 
