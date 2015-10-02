@@ -10,16 +10,15 @@ require 'set'
 module AboutmeCrawler
   class Crawler
     def initialize
-      initialize(read_settings_from_file)
-    end
-
-    def initialize(settings_hash)
+      settings_hash = read_settings_from_file
       client = Selenium::WebDriver::Remote::Http::Default.new
       profile = Selenium::WebDriver::Firefox::Profile.new
       proxy = {}
       proxy[:http] = settings_hash["http_proxy"] if settings_hash["http_proxy"] != ''
       proxy[:ssl] = settings_hash["ssl_proxy"] if settings_hash["ssl_proxy"] != ''
-      profile.proxy = Selenium::WebDriver::Proxy.new proxy
+      if proxy[:http] || proxy[:ssl]
+        profile.proxy = Selenium::WebDriver::Proxy.new proxy
+      end
       client.timeout = settings_hash["timeout"].to_i > 0 ? settings_hash["timeout"].to_i : DEFAULT_TIMEOUT
 
       @timeout = client.timeout
@@ -71,8 +70,8 @@ module AboutmeCrawler
       while links_set.size < @max_results && links_set.size < number_of_results
         @browser.scroll.to :bottom
         sleep(@step_delay)
-        browser.div(class: 'pagethumbs-responsive').when_present(@timeout)
-        html_doc = "<html><head></head><body>" + browser.div(class: 'search-results-container').html + "</body></html>"
+        @browser.div(class: 'pagethumbs-responsive').when_present(@timeout)
+        html_doc = "<html><head></head><body>" + @browser.div(class: 'search-results-container').html + "</body></html>"
         extract_profile_links(html_doc, links_set, number_of_results)
       end
 
@@ -116,7 +115,7 @@ module AboutmeCrawler
       end
       doc.css('span.thumb_description a').each do |elem|
         profile_links_set.add [elem.content, "about.me" + elem['href']]
-        break if profile_links_set.size == max_results
+        break if profile_links_set.size == @max_results
       end
     end
 
