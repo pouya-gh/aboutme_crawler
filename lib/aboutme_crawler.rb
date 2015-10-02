@@ -21,6 +21,7 @@ module AboutmeCrawler
       profile.proxy = Selenium::WebDriver::Proxy.new proxy
       client.timeout = settings_hash[:timeout].to_i > 0 ? settings_hash[:timeout].to_i : DEFAULT_TIMEOUT
 
+      @timeout = client.timeout
       @username = settings_hash[:username]
       @password = settings_hash[:password]
       @step_delay = settings_hash[:step_delay].to_i > 0 ? settings_hash[:step_delay].to_i : DEFAULT_STEP_DELAY
@@ -69,7 +70,7 @@ module AboutmeCrawler
       while links_set.size < @max_results && links_set.size < number_of_results
         @browser.scroll.to :bottom
         sleep(@step_delay)
-        browser.div(class: 'pagethumbs-responsive').when_present(100)
+        browser.div(class: 'pagethumbs-responsive').when_present(@timeout)
         html_doc = "<html><head></head><body>" + browser.div(class: 'search-results-container').html + "</body></html>"
         extract_profile_links(html_doc, links_set, number_of_results)
       end
