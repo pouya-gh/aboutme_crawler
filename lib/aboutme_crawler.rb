@@ -17,17 +17,17 @@ module AboutmeCrawler
       client = Selenium::WebDriver::Remote::Http::Default.new
       profile = Selenium::WebDriver::Firefox::Profile.new
       proxy = {}
-      proxy[:http] = settings_hash[:http_proxy] if settings_hash[:http_proxy] != ''
-      proxy[:ssl] = settings_hash[:ssl_proxy] if settings_hash[:ssl_proxy] != ''
+      proxy[:http] = settings_hash["http_proxy"] if settings_hash["http_proxy"] != ''
+      proxy[:ssl] = settings_hash["ssl_proxy"] if settings_hash["ssl_proxy"] != ''
       profile.proxy = Selenium::WebDriver::Proxy.new proxy
-      client.timeout = settings_hash[:timeout].to_i > 0 ? settings_hash[:timeout].to_i : DEFAULT_TIMEOUT
+      client.timeout = settings_hash["timeout"].to_i > 0 ? settings_hash["timeout"].to_i : DEFAULT_TIMEOUT
 
       @timeout = client.timeout
-      @username = settings_hash[:username]
-      @password = settings_hash[:password]
-      @step_delay = settings_hash[:step_delay].to_i > 0 ? settings_hash[:step_delay].to_i : DEFAULT_STEP_DELAY
-      @search_query = settings_hash[:search_query] != '' ? settings_hash[:search_query] : DEFAULT_SEARCH_QUERY
-      @max_results = settings_hash[:max_results].to_i > 0 ? settings_hash[:max_results].to_i : DEFAULT_MAX_RESULTS
+      @username = settings_hash["username"]
+      @password = settings_hash["password"]
+      @step_delay = settings_hash["step_delay"].to_i > 0 ? settings_hash["step_delay"].to_i : DEFAULT_STEP_DELAY
+      @search_query = settings_hash["search_query"] != '' ? settings_hash["search_query"] : DEFAULT_SEARCH_QUERY
+      @max_results = settings_hash["max_results"].to_i > 0 ? settings_hash["max_results"].to_i : DEFAULT_MAX_RESULTS
       @browser = Watir::Browser.new :firefox, profile: profile, http_client: client
     end
 
