@@ -33,11 +33,11 @@ module AboutmeCrawler
 
     end
 
-    def search_for(q)
+    def search_for
 
     end
 
-    def crawl_profiles(list_of_links)
+    def crawl_profiles
 
     end
 
