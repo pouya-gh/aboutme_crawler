@@ -104,8 +104,19 @@ module AboutmeCrawler
 
     private
 
-    def extract_profile_links(html_doc, profile_links_set, number_of_results, max_results)
+    def extract_profile_links(html_doc, profile_links_set, number_of_results)
+      if profile_links_set.size >= @max_results || profile_links_set.size == number_of_results
+        return
+      end
 
+      doc = Nokogiri::HTML(html_doc)
+      doc.css('span.interests').each do |elem|
+        elem.content = ''
+      end
+      doc.css('span.thumb_description a').each do |elem|
+        profile_links_set.add [elem.content, "about.me" + elem['href']]
+        break if profile_links_set.size == max_results
+      end
     end
 
     def extract_contacts(html_doc)
