@@ -35,7 +35,7 @@ module AboutmeCrawler
     end
 
     def read_settings_from_file
-
+      JSON.parse(File.open('./settings.json').read)
     end
   end # end of Crawler
 end # end of AboutmeCrawler
