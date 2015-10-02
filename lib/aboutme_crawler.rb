@@ -80,7 +80,26 @@ module AboutmeCrawler
     end
 
     def crawl_profiles
+      list_of_links = JSON.parse(File.open('./output/profiles.json').read)
+      user_contacts = []
+      output_file = File.open('./output/contacts.json', 'w')
 
+      list_of_links.each do |elem|
+        @browser.goto elem[1]
+        sleep(@step_delay)
+        @browser.div(class: 'biobox').when_present(@timeout)
+        sleep(@step_delay)
+        if @browser.ul(id: 'app-icons').present?
+          contacts = extract_contacts(@browser.ul(id: 'app-icons').when_present(@timeout).html())
+        else
+          contacts = []
+        end
+        result = {'name' => elem[0], 'profile_link' => elem[1], 'contacts' => contacts }
+        user_contacts.push result
+      end
+
+      output_file.puts user_contacts.to_json
+      output_file.close
     end
 
     private
@@ -90,7 +109,7 @@ module AboutmeCrawler
     end
 
     def extract_contacts(html_doc)
-
+      
     end
 
     def read_settings_from_file
