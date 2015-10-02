@@ -1,5 +1,6 @@
 require "aboutme_crawler/version"
 require "aboutme_crawler/constants"
+require "aboutme_crawler/bin_helper_functions"
 require 'watir-webdriver'
 require 'watir-scroll'
 require 'nokogiri'
