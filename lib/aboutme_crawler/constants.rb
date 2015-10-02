@@ -2,4 +2,5 @@ module AboutmeCrawler
   DEFAULT_TIMEOUT = 180
   DEFAULT_STEP_DELAY = 3
   DEFAULT_SEARCH_QUERY = "john smith"
+  DEFAULT_MAX_RESULTS = 3
 end
