@@ -48,4 +48,6 @@ else
     crawler.search_for
     crawler.crawl_profiles
   end
+  
+  crawler.terminate
 end

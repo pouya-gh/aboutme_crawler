@@ -102,6 +102,10 @@ module AboutmeCrawler
       output_file.close
     end
 
+    def terminate
+      @browser.close
+    end
+
     private
 
     def extract_profile_links(html_doc, profile_links_set, number_of_results)
