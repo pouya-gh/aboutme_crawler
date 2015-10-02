@@ -1,7 +1,3 @@
-# AboutmeCrawler
-
-TODO: Write a gem description
-
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -20,12 +16,34 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+This gem is designed to be command line tool.
+First, you have to create a new session with this command:
 
-## Contributing
+    $ find_aboutme -n <session_name>
 
-1. Fork it ( https://github.com/[my-github-username]/aboutme_crawler/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+Then you have to change to 'session_name' directory and
+fill the settings.json.
+Then you can start crawling like this:
+
+    $ find_aboutme
+
+If you don't want use the executable, here is an example how
+you can use this gem with coding.
+
+```ruby
+require 'aboutme_crawler'
+
+session = AboutmeCrawler::Crawler.new
+session.sign_in
+session.search_for
+session.crawl_profiles
+session.terminate
+```
+Of course, you have to have valid session skeleton. You can
+make that like this:
+
+```ruby
+require 'aboutme_crawler'
+
+AboutmeCrawler.make_project_skeleton('finding_private_ryan')
+```
