@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'aboutme_crawler'
+
+help = %q{Here are the valid flags and switches:
+  -n, --new-session <session_name>      Make a new session named 'session_name'.
+  -l, --links-only                      Only extract profile links.
+  -c, --continue                        Cotinue to extracting contacts (a profiles.json must exist).
+  -h, --help                            You see this help!
+}
+
+options = {}
+options[:crawling_options] = {}
+option_parser = OptionParser.new do |opts|
+  opts.on("-n NAME", "--new-session NAME") do |name|
+    options[:project_name] = name
+  end
+
+  opts.on("-l", "--links-only") do
+    options[:links_only] = true
+  end
+
+  opts.on("-c", "--continue") do
+    options[:contacts_only] = true
+  end
+
+  opts.on("-h", "--help") do
+    options[:needs_help] = true
+  end
+end
+
+option_parser.parse!
+if options[:needs_help]
+  puts help
+elsif options[:project_name]
+  AboutmeCrawler.make_project_skeleton(options[:project_name])
+  puts "\tDone!"
+else
+  crawler = AboutmeCrawler::Crawler.new
+  crawler.sign_in
+
+  if options[:links_only]
+    crawler.search_for
+  elsif options[:contacts_only]
+    crawler.crawl_profiles
+  else
+    crawler.search_for
+    crawler.crawl_profiles
+  end
+end
