@@ -29,6 +29,10 @@ module AboutmeCrawler
       @browser = Watir::Browser.new :firefox, profile: profile, http_client: client
     end
 
+    def sign_in
+
+    end
+
     def search_for(q)
 
     end
