@@ -109,7 +109,12 @@ module AboutmeCrawler
     end
 
     def extract_contacts(html_doc)
-      
+      doc = Nokogiri::HTML(html_doc)
+      contacts = []
+      doc.css('a.icon').each do |elem|
+        contacts.push elem['href']
+      end
+      contacts
     end
 
     def read_settings_from_file
